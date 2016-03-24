@@ -420,5 +420,13 @@ RSpec.describe Docx::Document do
       end
     end
   end
+
+  describe '#wordcount' do
+    let(:doc) { Docx::Document.open("#{fixtures_path}/basic.docx") }
+
+    it 'finds the stored wordcount' do
+      expect(doc.wordcount).to eq(1)
+    end    
+  end
 end
 

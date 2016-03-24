@@ -27,6 +27,8 @@ module Docx
       @doc = Nokogiri::XML(@document_xml)
       @styles_xml = @zip.read('word/styles.xml')
       @styles = Nokogiri::XML(@styles_xml)
+      @doc_props_xml = @zip.read('docProps/app.xml')
+      @doc_props = Nokogiri::XML(@doc_props_xml)
       if block_given?
         yield self
         @zip.close
@@ -48,6 +50,10 @@ module Docx
     #   open(filepath) {|file| block } => obj
     def self.open(path, &block)
       self.new(path, &block)
+    end
+
+    def wordcount
+      @doc_props.xpath('//ep:Words', 'ep' => 'http://schemas.openxmlformats.org/officeDocument/2006/extended-properties').first.content.to_i
     end
 
     def paragraphs
